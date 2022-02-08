@@ -3,6 +3,7 @@ package com.example.mvpfood.main
 import com.example.mvpfood.api.ApiConfig
 import com.example.mvpfood.base.BasePresenter
 import com.example.mvpfood.model.ResponseGetFood
+import com.example.mvpfood.updatedelete.UpdateDeleteConstruct
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,6 +40,36 @@ class MainPresenter(var mainView : MainActivity) : BasePresenter<MainConstruct.v
             }
 
         })
+    }
+
+    //Crud
+    override fun insertFood(namaMakanan: String, hargaMakanan: String, gambarMakanan: String){
+        ApiConfig.service.insertFood(namaMakanan, hargaMakanan, gambarMakanan).enqueue(object : Callback<ResponseGetFood>{
+            override fun onResponse(
+                call: Call<ResponseGetFood>,
+                response: Response<ResponseGetFood>
+            ) {
+                if (response. isSuccessful || response.code() == 200){
+                    val msg = response.body()?.pesan
+                    val sukses = response.body()?.sukses
+                    if (sukses != false){
+                        mainView?.onSuccessInsert()
+                        mainView?.showMessage(msg.toString())
+                    }else{
+                        mainView?.showMessage(msg.toString())
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseGetFood>, t: Throwable) {
+                mainView?.showError(t.message.toString())
+            }
+
+        })
+    }
+
+    override fun onAttach(view: UpdateDeleteConstruct) {
+        TODO("Not yet implemented")
     }
 
 }

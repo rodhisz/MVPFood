@@ -2,7 +2,6 @@ package com.example.mvpfood.main
 
 import com.example.mvpfood.base.BaseView
 import com.example.mvpfood.model.DataItem
-import com.example.mvpfood.model.ResponseGetFood
 
 interface MainConstruct {
     interface view : BaseView{
@@ -14,5 +13,6 @@ interface MainConstruct {
 
     interface Presenter{
         fun getAllFood()
+        fun insertFood(namaMakanan: String, hargaMakanan: String, gambarMakanan: String)
     }
 }

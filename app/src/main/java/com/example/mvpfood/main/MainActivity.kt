@@ -1,8 +1,13 @@
 package com.example.mvpfood.main
 
+import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.mvpfood.R
 import com.example.mvpfood.model.DataItem
@@ -61,4 +66,44 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         mainPresenter?.getAllFood()
     }
+
+    //Crud
+    fun onSuccessInsert() {
+        mainPresenter?.getAllFood()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.tambah_menu -> {
+                showDialogInsert()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun showDialogInsert() {
+        val alert = AlertDialog.Builder(this)
+        val view = layoutInflater.inflate(R.layout.dialog_insert, null)
+        alert.setView(view)
+        alert.setCancelable(false)
+        alert.setTitle("Tambah Makanan")
+        alert.setPositiveButton("Simpan", DialogInterface.OnClickListener { dialogInterface, i ->
+            val namaMakanan = view.findViewById<EditText>(R.id.edt_nama_makanan)
+            val hargaMakanan = view.findViewById<EditText>(R.id.edt_harga)
+            val gambarMakanan = view.findViewById<EditText>(R.id.edt_gambar)
+
+            mainPresenter?.insertFood(namaMakanan.text.toString(),hargaMakanan.text.toString(),gambarMakanan.text.toString())
+            dialogInterface.dismiss()
+        })
+        alert.setNeutralButton("Close", DialogInterface.OnClickListener { dialogInterface, i ->
+            dialogInterface.dismiss()
+        })
+        alert.show()
+    }
+
 }
